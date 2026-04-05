@@ -29,3 +29,22 @@ const int M3_LPWM = 19; // Motor 3 direction pin
 const int M3_REN = 5;  // Motor 3 enable pin
 const int M3_LEN = 17; // Motor 3 direction pin
 
+
+// Kinematics & Motor control function
+void setMotor(int rpwmPin, int lpwmPin, int renPin, int lenPin, int speed) {
+
+    int s = constrain(speed, -255, 255); // Constrain speed to -255 to 255
+    if (s > 0) {
+        analogWrite(rpwmPin, s);   // Set speed
+        analogWrite(lpwmPin, 0);
+    } 
+    else if (s < 0) {
+        analogWrite(rpwmPin, 0);
+        analogWrite(lpwmPin, -s);  // Set speed
+    }
+    else {
+        analogWrite(rpwmPin, 0);
+        analogWrite(lpwmPin, 0);
+    }
+}
+
