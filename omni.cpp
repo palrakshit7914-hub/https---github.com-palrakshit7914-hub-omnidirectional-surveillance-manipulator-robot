@@ -48,3 +48,17 @@ void setMotor(int rpwmPin, int lpwmPin, int renPin, int lenPin, int speed) {
     }
 }
 
+
+// Function to move the robot based on x and y inputs
+void moveRobot(int x, int y) {
+    // Calculate motor speeds based on desired x and y movement
+    int m1Speed = y + x; // Front motor
+    int m2Speed = y - x; // Left motor
+    int m3Speed = y - x; // Right motor
+
+    // Set motor speeds
+    setMotor(M1_RPWM, M1_LPWM, M1_REN, M1_LEN, m1Speed);
+    setMotor(M2_RPWM, M2_LPWM, M2_REN, M2_LEN, m2Speed);
+    setMotor(M3_RPWM, M3_LPWM, M3_REN, M3_LEN, m3Speed);
+}
+
