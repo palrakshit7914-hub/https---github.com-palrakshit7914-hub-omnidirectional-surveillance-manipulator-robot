@@ -62,3 +62,13 @@ void moveRobot(int x, int y) {
     setMotor(M3_RPWM, M3_LPWM, M3_REN, M3_LEN, m3Speed);
 }
 
+// WEBSOCKET EVENT HANDLER
+void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length) {     
+    if (type == WStype_TEXT) {
+        
+        int x,y,t;
+        if (sscanf((char*)payload, "%d,%d,%d", &x, &y, &t) == 3) {
+            moveRobot(x, y,t); // Move the robot based on received x , y and t values
+        }
+    }
+}
