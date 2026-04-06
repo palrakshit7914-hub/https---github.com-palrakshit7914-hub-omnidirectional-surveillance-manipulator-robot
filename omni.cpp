@@ -95,3 +95,20 @@ void handleRoot() {
   
   server.send(200, "text/html", html);
 }
+
+void setup() {
+
+    int pins[] = {25,26,33,32,27,14,12,13,18,19,5,17};
+    for (int p : pins) {
+         digitalWrite(33, 1); digitalWrite(32, 1);
+  digitalWrite(12, 1); digitalWrite(13, 1);
+  digitalWrite(5, 1);  digitalWrite(17, 1);}
+
+  WiFi.softAP(ssid, password); // Start WiFi in AP mode
+  server.on("/", handleRoot); // Define route for root URL
+  server.begin(); // Start the web server
+
+  webSocket.begin(); // Start the WebSocket server
+  webSocket.onEvent(webSocketEvent); // Set the WebSocket event handler  
+}
+
