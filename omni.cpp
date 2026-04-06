@@ -112,3 +112,8 @@ void setup() {
   webSocket.onEvent(webSocketEvent); // Set the WebSocket event handler  
 }
 
+
+void loop() {
+  server.handleClient(); // Handle incoming HTTP requests
+  webSocket.loop(); // Handle WebSocket events
+}
