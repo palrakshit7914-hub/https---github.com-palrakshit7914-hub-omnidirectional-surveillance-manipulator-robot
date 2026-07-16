@@ -92,6 +92,10 @@ def execute_robot(command_sequence):
             time.sleep(1.5)
         else:
             time.sleep(0.5)
+    
+    except Exception as e:
+        robot_talk("You are offline, Connect to the wifi")
+        print(f"Connection Failed: {e}")
 
 
 
