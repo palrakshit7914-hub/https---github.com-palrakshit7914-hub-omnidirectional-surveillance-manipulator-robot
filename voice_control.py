@@ -3,7 +3,7 @@ import pyttsx3
 import websockets
 import time
 import json
-from openai import OpenAI 
+from google import genai
 
 WS_URL = "ws://192.168.4.1:81/"  #This is the WebSocket URL for the ESP32 device
 
@@ -74,8 +74,15 @@ def ai_agent_reasoning(user_command):
     
     Output valid raw JSON only. Do not include markdown design tick marks or code blocks.
     """
+    response = client.chat.completion.create(
+        model = "gemini-2.5-flash",
+        contents = user_command,
+        config = genai.types.GenerateContentConfig(system_instruction=system_prompt,response_mime_type="application/json", response_schema=RobotActionSchema, temprature = 0.1),
+    )
+
+    return json.loads(response.text)
+
 
 
 if __name__ == "__main__":
-    # Say hello at startup
     robot_talk("I am ready for the work. Gimme command sir")
