@@ -45,9 +45,37 @@ def capture_voice():
         return None
 
 
-def ai_agent_
+def ai_agent_reasoning(user_command):
+    """The AI Agent Brain. Translates conversational text into your exact
+    ESP32 WebSocket string packets dynamically."""
+
+    system_prompt = """
+    You are the Agentic AI brain managing an omnidirectional mobile manipulator robot.
+    Your physical host platform accepts exact command strings over a raw websocket network:
+    
+    1. Omni Base Movement string template: "x,y,turn"
+       - Forward: "0,200,0"  | Backward: "0,-200,0"
+       - Strafe Left: "-200,0,0" | Strafe Right: "200,0,0"
+       - Rotate Counter-Clockwise: "0,0,-150" | Rotate Clockwise: "0,0,150"
+       - Complete Halt: "0,0,0"
+       
+    2. Manipulator / Eye Servos template: "S,channel,angle"
+       - Channels available: 0, 1, 2, 3 (Angles range from 0 to 180)
+       
+    3. Accessory N20 Motor template: "N,speed"
+       - Forward: "N,255" | Reverse: "N,-255" | Halt: "N,0"
+
+    Analyze the user's natural language instruction. Reason out the necessary logical movements. 
+    Output a clean, valid JSON dictionary containing your structural reasoning and a simple array 
+    list of sequential command strings to execute. Always conclude standard movement lists with a halt ("0,0,0") command.
+
+    Example Input: "Slide left to avoid the wall, step forward, and rotate the first servo to ninety degrees."
+    Example Output: {"reasoning": "Bypassing obstacle by strafing left, moving forward, adjusting arm servo 0, and halting.", "sequence": ["-200,0,0", "0,200,0", "S,0,90", "0,0,0"]}
+    
+    Output valid raw JSON only. Do not include markdown design tick marks or code blocks.
+    """
 
 
 if __name__ == "__main__":
     # Say hello at startup
-    robot_talk("Your Robot is online. Awaiting command")
+    robot_talk("I am ready for the work. Gimme command sir")
