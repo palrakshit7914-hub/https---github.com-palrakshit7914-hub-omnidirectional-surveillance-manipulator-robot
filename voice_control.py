@@ -34,7 +34,18 @@ def capture_voice():
         "whats ur command sir??")
         recognizer.adjust_for_ambient_noise(source, duration=0.8)
         audio = recognizer.listen(source)
+    try:
+        text= recognizer.recognize_google(audio)
+        print(f"Command is: '{text}'")
+        engine.say(f"Command is: '{text}")
+        return text
+    
+    except Exception:
+        robot_talk("I did't catch the command. Please say it again")
+        return None
 
+
+def ai_agent_
 
 
 if __name__ == "__main__":
