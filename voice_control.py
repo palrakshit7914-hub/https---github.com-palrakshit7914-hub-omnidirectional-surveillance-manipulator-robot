@@ -88,6 +88,11 @@ def execute_robot(command_sequence):
         ws = websocket.create_connection(WS_URL, timeout = 3)
         print("websocket pipeline establish") #means py script and robot has connected
 
+        if ',' in command and not command.startswith("S") and not command.startswith("N") and command != "0,0,0":
+            time.sleep(1.5)
+        else:
+            time.sleep(0.5)
+
 
 
 if __name__ == "__main__":
