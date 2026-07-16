@@ -7,7 +7,7 @@ from google import genai
 
 WS_URL = "ws://192.168.4.1:81/"  #This is the WebSocket URL for the ESP32 device
 
-openai_client = OpenAI(api_key="YOUR_OPENAI_API_KEY") #Here u have to paste the API Key of Gemini or any openai api key 
+client = genai.Client()
 
 #this will speak the output text
 engine = pyttsx3.init()
@@ -29,8 +29,6 @@ def capture_voice():
     recognizer = sr.Recognizer()
     with sr.Microphone() as source:
         print("I a Listing Sir..." \
-        "whats ur command sir??")
-        engine.say("I a Listing Sir..." \
         "whats ur command sir??")
         recognizer.adjust_for_ambient_noise(source, duration=0.8)
         audio = recognizer.listen(source)
@@ -97,7 +95,20 @@ def execute_robot(command_sequence):
         robot_talk("You are offline, Connect to the wifi")
         print(f"Connection Failed: {e}")
 
-
-
 if __name__ == "__main__":
     robot_talk("I am ready for the work. Gimme command sir")
+
+    voice_input = capture_voice()
+    if voice_input:
+        print("Processing Agentic logic map")
+        try:
+            agent_decision = ai_agent_reasoning(voice_input)
+            print(f"Reasoning Matrix: {agent_decision['reasoning']}")
+            
+            robot_talk(f"Planning complete. Reason: {agent_decision['reasoning']}")
+            execute_robot(agent_decision['sequence'])
+            robot_talk("Task completed successfully.")
+
+        except Exception as parse_error:
+            robot_talk("Parsing error in cognitive core.")
+            print(f"Error compiling JSON: {parse_error}")
