@@ -82,6 +82,12 @@ def ai_agent_reasoning(user_command):
 
     return json.loads(response.text)
 
+def execute_robot(command_sequence):
+    try:
+        print(f"Connecting to the WebSocket at {WS_URL}")
+        ws = websocket.create_connection(WS_URL, timeout = 3)
+        print("websocket pipeline establish") #means py script and robot has connected
+
 
 
 if __name__ == "__main__":
