@@ -106,7 +106,12 @@ if __name__ == "__main__":
         voice_input = capture_voice()
         if voice_input:
             cleaned_input= voice_input.lower().strip()
-            print("Processing Agentic logic map")
+            if cleaned_input in ["Stop","terminate", "exit", "stop loop","Dont move","shut down","power off"]:
+                robot_talk("Shutting down the omnidirectional surveillance and manipulator robot")
+
+            break
+
+        print("Processing Agentic logic map")
         try:
             agent_decision = ai_agent_reasoning(voice_input)
             print(f"Reasoning Matrix: {agent_decision['reasoning']}")
