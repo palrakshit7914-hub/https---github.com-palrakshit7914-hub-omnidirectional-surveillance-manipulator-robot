@@ -1,9 +1,14 @@
 import speech_recognition as sr
 import pyttsx3
-import websockets
+import websocket
 import time
 import json
 from google import genai
+from pydantic import BaseModel
+
+class RobotActionSchema(BaseModel):
+    reasoning: str
+    sequence: list[str]
 
 WS_URL = "ws://192.168.4.1:81/"  #This is the WebSocket URL for the ESP32 device
 
@@ -44,9 +49,6 @@ def capture_voice():
 
 
 def ai_agent_reasoning(user_command):
-    """The AI Agent Brain. Translates conversational text into your exact
-    ESP32 WebSocket string packets dynamically."""
-
     system_prompt = """
     You are the Agentic AI brain managing an omnidirectional mobile manipulator robot.
     Your physical host platform accepts exact command strings over a raw websocket network:
@@ -64,20 +66,20 @@ def ai_agent_reasoning(user_command):
        - Forward: "N,255" | Reverse: "N,-255" | Halt: "N,0"
 
     Analyze the user's natural language instruction. Reason out the necessary logical movements. 
-    Output a clean, valid JSON dictionary containing your structural reasoning and a simple array 
-    list of sequential command strings to execute. Always conclude standard movement lists with a halt ("0,0,0") command.
-
-    Example Input: "Slide left to avoid the wall, step forward, and rotate the first servo to ninety degrees."
-    Example Output: {"reasoning": "Bypassing obstacle by strafing left, moving forward, adjusting arm servo 0, and halting.", "sequence": ["-200,0,0", "0,200,0", "S,0,90", "0,0,0"]}
-    
-    Output valid raw JSON only. Do not include markdown design tick marks or code blocks.
+    Always conclude standard movement lists with a halt ("0,0,0") command.
     """
-    response = client.chat.completion.create(
-        model = "gemini-2.5-flash",
-        contents = user_command,
-        config = genai.types.GenerateContentConfig(system_instruction=system_prompt,response_mime_type="application/json", response_schema=RobotActionSchema, temprature = 0.1),
-    )
 
+    response = client.models.generate_content(
+        model='gemini-2.5-flash',
+        contents=user_command,
+        config=genai.types.GenerateContentConfig(
+            system_instruction=system_prompt,
+            response_mime_type="application/json",
+            response_schema=RobotActionSchema,
+            temperature=0.1
+        ),
+    )
+    
     return json.loads(response.text)
 
 def execute_robot(command_sequence):
