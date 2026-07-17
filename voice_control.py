@@ -100,9 +100,13 @@ def execute_robot(command_sequence):
 if __name__ == "__main__":
     robot_talk("I am ready for the work. Gimme command sir")
 
-    voice_input = capture_voice()
-    if voice_input:
-        print("Processing Agentic logic map")
+# without while loop it will run once and stop but if we use while loop it will run until we say stop or we manually stop
+
+    while True:
+        voice_input = capture_voice()
+        if voice_input:
+            cleaned_input= voice_input.lower().strip()
+            print("Processing Agentic logic map")
         try:
             agent_decision = ai_agent_reasoning(voice_input)
             print(f"Reasoning Matrix: {agent_decision['reasoning']}")
